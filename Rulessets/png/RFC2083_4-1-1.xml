@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../rulesSchema.xsd">
+	<reference>
+	    <reftype>RFC</reftype>
+	    <refid>2083</refid>    
+	    <specid>4.7</specid>
+	    <spectitle>IHDR Chunk</spectitle>
+	    <comment>
+	    Validation of IHDR chunk 
+	    </comment>
+	</reference>
+	<info>
+	    <author>Georges-B. MICHEL</author>
+	    <version>1.0</version>
+	    <description></description>
+	</info>
+	<asserts>
+		<ids>2</ids>
+	    <assert> 
+	    	<id>1</id>           
+	        <struct start="0" endianess="big">{"0000000dh".'IHDR'} / @width:uint32::(!0) / @height:uint32::(!0) / @:uint8::(1,2,4,8,16) / @color:uint8::(0,2,3,4,6) / @:uint8::(0) / @:uint8::(0) / @:uint8::(0,1)</struct>
+	        <message>Invalid IHDR Chunk format</message>  
+	        <controllers>
+	        	<control-true>
+	        		<if condition="((@width = 1) and (@height = 1)) or (@color > 1)">3.2</if>
+	        		<if condition="@color = 3">3.1</if>
+	        		<default>4.1</default>
+	        	</control-true> 
+	        	<control-false>
+	        		<default>EXIT</default>
+	        	</control-false>
+	        </controllers>	        	 
+	    </assert>
+	</asserts>
+</rule>
+
+

@@ -1,0 +1,70 @@
+<assertion> ::= ( <format_assertion> <separator> | <array_assertion> <separator> | <value_assertion> ) { "/" ( <format_assertion> | <array_assertion> | <value_assertion> ) }
+
+
+
+<array_assertion> ::= "[" <assertion> "," <integer> "," <assertion>  "," <integer>  "]"
+
+<value_assertion> ::= "{" <string_expression> "}" 
+
+<format_assertion> ::= <identifier> : <format_type> ( : <reference> | <integer> ) ( : <list> )
+
+
+
+<list> ::= "(" ( ( "!" <volatile> ) | <volatile> ) { "," ( ( "!" <volatile> ) | <volatile> ) } ")"
+
+<volatile> ::= <integer> 
+	| <identifier> 
+	| <interval> 
+	| <expression>
+	
+<interval> ::= ( ( <integer> | <identifier> ) ">" ( <integer> | <identifier> ) ) 
+	| ( ">" ( <integer> | <identifier> ) )
+
+<identifier> ::= "@" ( ( <character> { <character> } ) | "*" )
+
+<expression> ::= ( <preproc_expression> | <string_expression> | <identifier> ) { "." ( <preproc_expression> | <string_expression> | <identifier> ) }
+
+
+
+<preproc_expression> ::= "''" ( <binary_string> | <hexadecimal_string> | <octal_string> ) <preproc_type> "''" 
+
+<string_expression> ::= "'" <characters_string> "'"  
+
+
+
+<integer> ::= <number> | <integer> <number> 
+ 
+
+<characters_string> ::= <character> { <character> } 
+
+<binary_string> ::= "0" | "1" { "0" | "1" }
+
+<hexadecimal_string> ::= "a..f,0..9" { "a..f,0..9" }
+
+<octal_string> ::= "0..7" { "0..7" } 
+
+<number> ::= "0..9" 
+
+<character> ::= "based on the unicode character set" 
+
+
+
+<preproc_type> ::= "b" | "h" | "o"	
+
+<format_type> ::= "int4" 
+	| "uint4" 
+	| "int8" 
+	| "uint8" 
+	| "int16" 
+	| "uint16" 
+	| "hexh" 
+	| "hexl" 
+	| "hex" 
+	| "float" 
+	| "double" 
+	| "long" 
+	| "ulong" 
+	| "short" 
+	| "ushort" 
+	| "char" 
+	| "string" 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../configSchema.xsd">
+	<package_name>php_package</package_name>
+	<authors>Georges-B. MICHEL</authors>
+	<version>1.0</version>
+	<language>php</language>
+	<file_extension>.php</file_extension>
+	<generator>PHPGenerator.php</generator>
+	<files_required>
+		<file>include/FFVOpe.php</file>
+		<file>include/FFV.php</file>
+	</files_required>
+	<methods>
+		<init>$this->_init({POSITION},{ASSERT_ENDIANESS});</init>
+		<controllers>
+			<true>return array('rid'=>{RULE_ID}, 'aid'=>{ASSERT_ID});</true>
+			<false>return array('rid'=>{RULE_ID}, 'aid'=>{ASSERT_ID});</false>
+			<end>return $this->_end();</end>
+			<exit>return $this->_exit();</exit>
+			<call>return array('rid'=>{RULE_ID}, 'aid'=>{ASSERT_ID});</call>
+		</controllers>
+		<operations>
+			<format>${ASSERT_VARNAME} = ${ASSERT_VARNAME} and $this->_opeFormat();</format>
+			<value>${ASSERT_VARNAME} = ${ASSERT_VARNAME} and $this->_opeValue();</value>
+		</operations>
+	</methods>	
+</module>

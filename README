@@ -1,0 +1,94 @@
+!! Actual version can't validate format
+
+Run FFV to make PHP Package from FFDB :
+------------------------------------------
+
+require 'Engines/PHP/Config.php';
+require 'Engines/PHP/LogicalExpression.php';
+require 'Engines/PHP/RulesetAnalyzer.php';
+require 'Engines/PHP/Ruleset.php';
+require 'Engines/PHP/Rule.php';
+require 'Engines/PHP/Assertion.php';
+require 'Engines/PHP/AssertionParser.php';
+require 'Engines/PHP/AssertionController.php';
+require 'Engines/PHP/Module.php';
+require 'Engines/PHP/ModuleLoader.php';
+require 'Engines/PHP/GeneratorInterface.php';
+require 'Engines/PHP/Generator.php';
+require 'Engines/PHP/Engine.php';
+
+
+$ffe = new Engine();
+$ffe->run();
+
+Run FFV for PHP on a file :
+-------------------------------
+
+require 'Packages/php_package/FFV.php';
+
+$validator = new FFV();
+$validator->validateFileFormat('testpng.png','png');
+
+How to write rule :
+-------------------
+
+Rules are based on 3 types of assertions :
+- Array assertion
+- Value assertion
+- Format assertion
+
+The are 2 basic types to write rules : value assert and format assert
+- Format assert allow you to perform :
+	=> check based on the format of a data
+	=> check if data is in a range values
+  and assign data to a symbol, to use it as a variable in the rest of the rule
+  
+- Value assert allow you to check if data is correctly set. Is useful if you need to check a static value
+  Value pattern can be concatened with variable data (create with format assertion) and other value writted 
+  in multiple formats : octal, binary, hexa, etc ...      
+
+The thirth type is powerful to check structured data in file. 
+Array assertion allow you to check simple structured data as an array and complex data as structure or object.
+
+<array_assertion> ::= "[" 
+	<assertion:format of cells> "," 
+	<integer:size of cells> "," 
+	<assertion:format of separator>  "," 
+	<integer:size of separator>  
+"]"   
+
+
+
+
+
+Some examples:
+
+uint4@length string:3@name {'IPLT'} string:length:(name)
+
+*:uint4:(4,5)
+
+length:uint4:(4,5)
+
+@alias:uint4
+
+uint4 / {'toto'} / [uint4,'t']
+
+@max:uint16 ; @min:uint16 ; @:string:( @min > @max)
+
+@nbcell:string:('UNe jour je suis alle a la peche');  
+{'IPLT'};
+[ 
+	[ 
+		@:uint4:(0 > 255), 
+		NULL,
+		3
+	], 
+	NULL, 
+	@nbcell 
+];
+
+@size:uint4 / [ @max:uint16 / @min:uint16 / @:string:( @min > @max) , 'toto']
+@size:uint4
+ #1 @max:uint16
+ #2 @min:uint16
+ #3 @:string:( @min > @max)
